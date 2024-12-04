@@ -2,7 +2,6 @@ package br.com.mercadolivre.api_atendimento_neocamp.model;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
 
 @Entity
 public class Chamado {

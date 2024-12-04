@@ -26,13 +26,6 @@ public class ChamadoController {
         return chamadoService.listar();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Chamado> atualizar(@PathVariable Long id, @RequestBody Chamado chamado) {
-        return chamadoService.atualizar(id, chamado)
-                .map(updatedChamado -> ResponseEntity.ok(updatedChamado))
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build()); // Retorna 404 se não encontrar o chamado
-    }
-
     @DeleteMapping("/{id}")
     public void excluir(@PathVariable Long id){
         chamadoService.excluir(id);

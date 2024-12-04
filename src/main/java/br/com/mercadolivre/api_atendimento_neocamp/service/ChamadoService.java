@@ -1,6 +1,8 @@
 package br.com.mercadolivre.api_atendimento_neocamp.service;
 
+import br.com.mercadolivre.api_atendimento_neocamp.model.Atendente;
 import br.com.mercadolivre.api_atendimento_neocamp.model.Chamado;
+import br.com.mercadolivre.api_atendimento_neocamp.repository.AtendenteRepository;
 import br.com.mercadolivre.api_atendimento_neocamp.repository.ChamadoRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,20 +17,21 @@ public class ChamadoService {
     @Autowired
     private ChamadoRespository chamadoRespository;
 
+    @Autowired
+    private AtendenteRepository atendenteRepository;
+
+
     public Chamado salvar(Chamado chamado){
+        if(chamado.getAtendente().getId() != null){
+            Atendente atendente = atendenteRepository.findById(chamado.getAtendente().getId())
+                    .orElseThrow(()-> new RuntimeException("Atendente não encontrado"));
+            chamado.setAtendente(atendente);
+        }
         return chamadoRespository.save(chamado);
     }
 
     public List<Chamado> listar(){
         return chamadoRespository.findAll();
-    }
-
-    public Optional<Chamado> atualizar(Long id, Chamado atualizado) {
-        return chamadoRespository.findById(id).map(chamado -> {
-            chamado.setDescricao(atualizado.getDescricao());
-            chamado.setStatus(atualizado.getStatus());
-            return chamadoRespository.save(chamado);
-        });
     }
 
     public void excluir(Long id){

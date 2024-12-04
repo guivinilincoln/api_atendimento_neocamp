@@ -3,7 +3,6 @@ package br.com.mercadolivre.api_atendimento_neocamp.model;
 import jakarta.persistence.*;
 
 import java.util.List;
-import java.util.Objects;
 
 
 @Entity
