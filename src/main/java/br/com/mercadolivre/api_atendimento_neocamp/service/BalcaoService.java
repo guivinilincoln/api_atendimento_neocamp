@@ -19,14 +19,18 @@ public class BalcaoService {
     private AtendenteRepository atendenteRepository;
 
     public Balcao salvar(Balcao balcao){
-        if (balcao.getAtendente() != null && balcao.getAtendente().getId() != null) {
-            Atendente atendente = atendenteRepository.findById(balcao.getAtendente().getId())
-                    .orElseThrow(() -> new RuntimeException("Atendente não encontrado"));
-            balcao.setAtendente(atendente); // Configura o atendente encontrado
-        } else {
+        if(balcao.getAtendente() == null || balcao.getAtendente().getId() == null){
             throw new RuntimeException("Atendente deve ser informado.");
         }
-        return balcaoRepository.save(balcao); // Salva o balcao
+        Atendente atendente = atendenteRepository.findById(balcao.getAtendente().getId())
+                .orElseThrow(() -> new RuntimeException("Atendente não encontrado."));
+
+        if (balcaoRepository.existsByAtendente(atendente)) {
+            throw new RuntimeException("Atendente já está vinculado a um balcão.");
+        }
+
+        balcao.setAtendente(atendente); // Vincula o atendente ao balcão
+        return balcaoRepository.save(balcao);
     }
 
     public List<Balcao> listar(){
